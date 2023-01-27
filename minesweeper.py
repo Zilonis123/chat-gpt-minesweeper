@@ -6,6 +6,11 @@ pygame.init()
 screen = pygame.display.set_mode((320, 320))
 pygame.display.set_caption("Minesweeper")
 
+# Set the window icon
+icon = pygame.image.load("Dalle-thumbnail.png")
+pygame.display.set_icon(icon)
+
+
 # Define the colors
 red = (255, 0, 0)
 green = (0, 255, 0)
