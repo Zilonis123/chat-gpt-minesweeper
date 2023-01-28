@@ -1,31 +1,45 @@
-# visualization.py
-from minesweeper_logic import generate_matrix, BOMB, count_mines
 import pygame
+from minesweeper_logic import generate_matrix, count_mines
 
-# Define the screen
-matrix_size = 8
-cell_size = 40
-screen_size = (matrix_size * cell_size, matrix_size * cell_size)
+# Initialize pygame
+pygame.init()
+
+# Define the screen size
+screen_size = (320, 320)
+
+# Create the screen with defined size and set caption and icon
 screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption("Minesweeper")
 icon = pygame.image.load("Dalle-thumbnail.png")
 pygame.display.set_icon(icon)
 
-# Initialize pygame
-pygame.init()
+def draw_matrix(matrix, matrix_size):
+    """
+    Draws the matrix on the screen using pygame.
+    Uses different background colors for different numbers.
+    """
+    # Define color dictionary for numbers
+    color_dict = {1: (0, 255, 0), 2: (0, 0, 255), 3: (255, 0, 0), 
+                  4: (0, 255, 255), 5: (255, 0, 255), 6: (255, 255, 0),
+                  7: (128, 0, 128), 8: (128, 128, 0)}
+    
+    # Initialize font
+    font = pygame.font.SysFont("comicsans", 20)
 
-# Define the font
-font = pygame.font.SysFont("comicsans", 20)
-
-# Draw the matrix function
-def draw_matrix(matrix):
     for x in range(matrix_size):
         for y in range(matrix_size):
-            rect = (cell_size * x, cell_size * y, cell_size, cell_size)
-            pygame.draw.rect(screen, (0, 255, 0), rect)
-            if matrix[x][y] > 0:
+            # Look up color for current cell
+            number = matrix[x][y]
+            color = color_dict.get(number, (255, 255, 255))
+            
+            # Draw rectangle with background color
+            rect = (40 * x, 40 * y, 40, 40)
+            pygame.draw.rect(screen, color, rect)
+            
+            # Draw number if cell is not empty
+            if number > 0:
                 text = font.render(str(int(matrix[x][y])), True, (0, 0, 0))
-                screen.blit(text, (cell_size * x + 15, cell_size * y + 10))
+                screen.blit(text, (40 * x + 15, 40 * y + 10))
 
 
 # main function
@@ -37,5 +51,5 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
 
-    draw_matrix(matrix)
+    draw_matrix(matrix, 8)
     pygame.display.update()
