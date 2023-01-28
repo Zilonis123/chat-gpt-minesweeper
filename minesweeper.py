@@ -1,47 +1,41 @@
+# visualization.py
+from minesweeper_logic import generate_matrix, BOMB, count_mines
 import pygame
-import numpy as np
-from minesweeper_logic import BOMB, generate_matrix, count_mines
 
-# Initialize pygame and create a window
-pygame.init()
-screen = pygame.display.set_mode((320, 320))
+# Define the screen
+matrix_size = 8
+cell_size = 40
+screen_size = (matrix_size * cell_size, matrix_size * cell_size)
+screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption("Minesweeper")
-
-# Set the window icon
 icon = pygame.image.load("Dalle-thumbnail.png")
 pygame.display.set_icon(icon)
 
-# Define the colors
-red = (255, 0, 0)
-green = (0, 255, 0)
+# Initialize pygame
+pygame.init()
 
-# Generate matrix
-matrix = generate_matrix()
+# Define the font
+font = pygame.font.SysFont("comicsans", 20)
 
-# Count mines
-matrix = count_mines(matrix)
-
+# Draw the matrix function
 def draw_matrix(matrix):
-    """This function takes a matrix as input and draws it on the screen using Pygame.
-    """
-    for x in range(8):
-        for y in range(8):
-            rect = (40 * x, 40 * y, 40, 40)
-            if matrix[x][y] == BOMB:
-                pygame.draw.rect(screen, red, rect)
-            else:
-                pygame.draw.rect(screen, green, rect)
-                
-# Game loop
-running = True
-while running:
+    for x in range(matrix_size):
+        for y in range(matrix_size):
+            rect = (cell_size * x, cell_size * y, cell_size, cell_size)
+            pygame.draw.rect(screen, (0, 255, 0), rect)
+            if matrix[x][y] > 0:
+                text = font.render(str(int(matrix[x][y])), True, (0, 0, 0))
+                screen.blit(text, (cell_size * x + 15, cell_size * y + 10))
+
+
+# main function
+matrix = generate_matrix()
+count_mines(matrix)
+
+while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            pygame.quit()
 
-    # Draw the matrix
     draw_matrix(matrix)
     pygame.display.update()
-
-# Quit pygame
-pygame.quit()
